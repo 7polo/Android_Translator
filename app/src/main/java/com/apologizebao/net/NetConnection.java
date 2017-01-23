@@ -1,16 +1,11 @@
 package com.apologizebao.net;
 
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
-
 import com.apologizebao.bean.ResultBean;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -20,7 +15,12 @@ import java.net.URLEncoder;
 public class NetConnection {
     private ResultBean resultBean;  //保存结果
     private String queryURI = "http://fanyi.youdao.com/openapi.do";
-    private String voiceURI = "http://dict.youdao.com/dictvoice";
+
+    public String getVoiceURI() {
+        return voiceURI;
+    }
+
+    public final String voiceURI = "http://dict.youdao.com/dictvoice";
 
     private String keyform = "javaTranslator";
     private String key = "332136996";
@@ -32,6 +32,10 @@ public class NetConnection {
     private HttpURLConnection connection;
     private URL url;
     private Gson gson;
+
+    public String getQuery() {
+        return query;
+    }
 
     private static NetConnection instance;
 
@@ -52,15 +56,13 @@ public class NetConnection {
         System.out.println(requestString);
     }
 
-    public ResultBean doQuery(String query) {
+    public ResultBean doQuery() {
         try {
-            this.query = query + "";
-
             url = new URL(requestString + URLEncoder.encode(query.trim(), "utf-8"));
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(3000);
-            connection.setReadTimeout(2000);
+            connection.setConnectTimeout(1000);
+            connection.setReadTimeout(500);
             InputStreamReader reader = new InputStreamReader(connection.getInputStream(), "utf-8"); //获得响应信息
 
             return resultBean = adaptor(reader);
@@ -72,6 +74,15 @@ public class NetConnection {
             connection.disconnect();
         }
         return resultBean;
+    }
+
+    public ResultBean doQuery(String query) {
+        this.query = query;
+        return doQuery();
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     /**
@@ -97,20 +108,4 @@ public class NetConnection {
         return gson.fromJson(dataBuffer.toString().replaceAll("-", "_"), ResultBean.class);
     }
 
-    public void getVoice(Context context, int type, String queryWord){
-        MediaPlayer player = new MediaPlayer();
-        try {
-            //开启线程请求
-            player.setDataSource(context, Uri.parse(voiceURI+"?audio="+queryWord+"&type="+type));
-            player.prepareAsync();
-            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

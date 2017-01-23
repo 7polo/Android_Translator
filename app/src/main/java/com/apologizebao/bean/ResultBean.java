@@ -12,11 +12,11 @@ public class ResultBean {
      * errorCode : 0
      * basic : {"phonetic":"wel","uk_phonetic":"wel","explains":["n. 井；源泉","adj. 良好的；健康的；适宜的","adv. 很好地；充分地；满意地；适当地","v. 涌出","","n. (Well)人名；(英、德、荷)韦尔"],"us_phonetic":"wɛl"}
      */
-    public List<WebEntity> web;
-    public String query;
-    public List<String> translation;
-    public int errorCode;
-    public BasicEntity basic;
+    private List<WebEntity> web;
+    private String query;
+    private List<String> translation;
+    private int errorCode;
+    private BasicEntity basic;
 
     public class WebEntity {
         /**
@@ -50,10 +50,10 @@ public class ResultBean {
          * explains : ["n. 井；源泉","adj. 良好的；健康的；适宜的","adv. 很好地；充分地；满意地；适当地","v. 涌出","","n. (Well)人名；(英、德、荷)韦尔"]
          * us_phonetic : wɛl
          */
-        public String phonetic;
-        public String uk_phonetic;
-        public List<String> explains;
-        public String us_phonetic;
+        private String phonetic;
+        private String uk_phonetic;
+        private List<String> explains;
+        private String us_phonetic;
 
         public String getPhonetic() {
             return phonetic;
@@ -64,6 +64,13 @@ public class ResultBean {
         }
 
         public List<String> getExplains() {
+            //解决空串出现的问题
+            for (int i =0; i < explains.size(); ){
+                if (explains.get(i).trim().equals("")){
+                    explains.remove(i);
+                }
+                else i++;
+            }
             return explains;
         }
 
@@ -72,7 +79,7 @@ public class ResultBean {
         }
 
         public String getUk_phonetic() {
-            return uk_phonetic;
+            return ""+uk_phonetic;
         }
 
         public void setUk_phonetic(String uk_phonetic) {
@@ -80,7 +87,7 @@ public class ResultBean {
         }
 
         public String getUs_phonetic() {
-            return us_phonetic;
+            return ""+us_phonetic;
         }
 
         public void setUs_phonetic(String us_phonetic) {
@@ -107,7 +114,7 @@ public class ResultBean {
     }
 
     public String getQuery() {
-        return query;
+        return ""+query;
     }
 
     public void setQuery(String query) {
