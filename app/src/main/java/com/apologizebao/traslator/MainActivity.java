@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.apologizebao.ui.ExpandListView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class MainActivity extends Activity {
 
@@ -30,6 +34,7 @@ public class MainActivity extends Activity {
     private TextView us_phonetic, uk_phonetic;
     private ListView explansListView, webListView;
     private ImageButton uk_voice, us_voice;
+    private ScrollView scrollView;
 
     private MediaPlayer player;
 
@@ -40,7 +45,10 @@ public class MainActivity extends Activity {
 
 
     //数据适配器
-    private ArrayAdapter<String> basicExpAdapter, webExpAdapter;
+    private ArrayAdapter<String> basicExpAdapter;
+    private SimpleAdapter webExpAdapter;
+    private ArrayList<HashMap<String, String>> webDataList = new ArrayList<>();
+    private HashMap<String, String> webDataMap;
 
 
     /**
@@ -54,6 +62,7 @@ public class MainActivity extends Activity {
         webListView = (ExpandListView) findViewById(R.id.webListView);
         uk_voice = (ImageButton) findViewById(R.id.uk_voice);
         us_voice = (ImageButton) findViewById(R.id.us_voice);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
     }
 
     //点击按钮查询
@@ -130,9 +139,14 @@ public class MainActivity extends Activity {
      */
     private void resetInitData() {
 
+        scrollView.setVisibility(View.INVISIBLE);
         resultBean = null;
+        //清空适配器中的数据
         basicExpAdapter.clear();
         basicExpAdapter.notifyDataSetChanged();
+        webDataList.clear();
+        webExpAdapter.notifyDataSetChanged();
+
         us_phonetic.setText("");
         uk_phonetic.setText("");
         playFlag = false;
@@ -148,6 +162,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 if (bean.getBasic() != null) {
+                    scrollView.setVisibility(View.VISIBLE);
                     Toast.makeText(getApplicationContext(), "查询到结果，正在刷新数据....", Toast.LENGTH_LONG).show();
                     //发音为null,不显示null
                     if (bean.getBasic().getUk_phonetic() != null)
@@ -155,8 +170,18 @@ public class MainActivity extends Activity {
                     if (bean.getBasic().getUs_phonetic() != null)
                         us_phonetic.setText(bean.getBasic().getUs_phonetic());
 
+                    //适配器数据
                     basicExpAdapter.addAll(resultBean.getBasic().getExplains());
                     basicExpAdapter.notifyDataSetChanged();
+                    if (bean.getWeb() != null) {
+                        for (ResultBean.WebEntity webEntity : bean.getWeb()){
+                            webDataMap = new HashMap<String, String>();
+                            webDataMap.put("key",webEntity.getKey());
+                            webDataMap.put("value",webEntity.getValues());
+                            webDataList.add(webDataMap);
+                        }
+                        webExpAdapter.notifyDataSetChanged();
+                    }
                     playFlag = true; //查询到结果才可以发音
                 } else {
                     Toast.makeText(getApplicationContext(), "未查到结果", Toast.LENGTH_LONG).show();
@@ -176,6 +201,9 @@ public class MainActivity extends Activity {
 
         basicExpAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
         explansListView.setAdapter(basicExpAdapter);
+        webExpAdapter = new SimpleAdapter(this, webDataList, R.layout.webitem_layout, new String[]{"key", "value"}, new int[]{R.id.webKey, R.id.webValue});
+        webListView.setAdapter(webExpAdapter);
+
         player = new MediaPlayer();
         resultBean = new ResultBean();
 
@@ -206,8 +234,6 @@ public class MainActivity extends Activity {
             }
         });
 
-
-//        webExpAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, resultBean.web.getValue());
     }
 
 

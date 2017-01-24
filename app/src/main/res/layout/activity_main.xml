@@ -124,12 +124,10 @@
 
         <!--解释   -->
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="invisible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -137,25 +135,37 @@
                     android:orientation="vertical">
 
                     <!--解释翻译-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginBottom="5dp"
+                        android:text="翻译"/>
                     <com.apologizebao.ui.ExpandListView
                         android:id="@+id/explansListView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/voicebackground"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="20dp" >
 
                     </com.apologizebao.ui.ExpandListView>
 
                     <!--web翻译-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginBottom="5dp"
+                        android:text="Web来源"/>
                     <com.apologizebao.ui.ExpandListView
                         android:id="@+id/webListView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/voicebackground"
+                        android:layout_marginBottom="20dp">
                     </com.apologizebao.ui.ExpandListView>
 
                 </LinearLayout>
-            </FrameLayout>
         </ScrollView>
 
     </LinearLayout>

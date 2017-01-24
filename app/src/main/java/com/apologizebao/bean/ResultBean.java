@@ -43,6 +43,14 @@ public class ResultBean {
         public void setKey(String key) {
             this.key = key;
         }
+
+        public String getValues() {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String str : value){
+                stringBuilder.append("、"+str);
+            }
+            return  stringBuilder.delete(0,1).toString();
+        }
     }
 
     public class BasicEntity {
