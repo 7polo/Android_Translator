@@ -1,5 +1,7 @@
 package com.apologizebao.bean;
+
 import java.util.List;
+
 /**
  * Created by apologizebao on 17-1-19.
  */
@@ -65,11 +67,10 @@ public class ResultBean {
 
         public List<String> getExplains() {
             //解决空串出现的问题
-            for (int i =0; i < explains.size(); ){
-                if (explains.get(i).trim().equals("")){
+            for (int i = 0; i < explains.size(); ) {
+                if (explains.get(i).trim().equals("")) {
                     explains.remove(i);
-                }
-                else i++;
+                } else i++;
             }
             return explains;
         }
@@ -78,21 +79,22 @@ public class ResultBean {
             this.explains = explains;
         }
 
-        public String getUk_phonetic() {
-            return ""+uk_phonetic;
-        }
-
-        public void setUk_phonetic(String uk_phonetic) {
-            this.uk_phonetic = uk_phonetic;
+        public void setUs_phonetic(String us_phonetic) {
+            this.us_phonetic = us_phonetic == null || us_phonetic.equals("null") ? null : us_phonetic;
         }
 
         public String getUs_phonetic() {
-            return ""+us_phonetic;
+            return us_phonetic;
         }
 
-        public void setUs_phonetic(String us_phonetic) {
-            this.us_phonetic = us_phonetic;
+        public void setUk_phonetic(String uk_phonetic) {
+            this.uk_phonetic = uk_phonetic == null || uk_phonetic.equals("null") ? null : uk_phonetic;
         }
+
+        public String getUk_phonetic() {
+            return uk_phonetic;
+        }
+
 
         @Override
         public String toString() {
@@ -114,7 +116,7 @@ public class ResultBean {
     }
 
     public String getQuery() {
-        return ""+query;
+        return "" + query;
     }
 
     public void setQuery(String query) {

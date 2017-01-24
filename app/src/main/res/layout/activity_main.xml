@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:maxLines="1"
-                android:background="@drawable/shape"
+                android:background="@drawable/edittextstroke"
                 android:paddingLeft="10dp" />
 
             <ImageButton
@@ -40,9 +40,12 @@
         <!--发音    -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="78dp"
             android:layout_marginBottom="15dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:padding="8dp"
+
+            android:background="@drawable/voicebackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,6 +141,7 @@
                         android:id="@+id/explansListView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/voicebackground"
                         android:layout_marginBottom="20dp">
 
                     </com.apologizebao.ui.ExpandListView>

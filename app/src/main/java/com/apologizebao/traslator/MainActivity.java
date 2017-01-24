@@ -42,6 +42,20 @@ public class MainActivity extends Activity {
     //数据适配器
     private ArrayAdapter<String> basicExpAdapter, webExpAdapter;
 
+
+    /**
+     * 绑定View
+     */
+    private void findView() {
+        wordInput = (EditText) findViewById(R.id.wordInput);
+        us_phonetic = (TextView) findViewById(R.id.us_phonetic);
+        uk_phonetic = (TextView) findViewById(R.id.uk_phonetic);
+        explansListView = (ExpandListView) findViewById(R.id.explansListView);
+        webListView = (ExpandListView) findViewById(R.id.webListView);
+        uk_voice = (ImageButton) findViewById(R.id.uk_voice);
+        us_voice = (ImageButton) findViewById(R.id.us_voice);
+    }
+
     //点击按钮查询
     public void doQuery(View v) {
         connection.setQuery("" + wordInput.getText().toString().trim());
@@ -63,21 +77,29 @@ public class MainActivity extends Activity {
                 public void run() {
                     resultBean = connection.doQuery();
 
-                    if (resultBean.getErrorCode() == 0) {
+                    if (resultBean != null && resultBean.getErrorCode() == 0) {
                         showData(resultBean);
-                    }
-                    try {
-                        sleep(1500);
-                    } catch (InterruptedException e) {
+                    } else {
+                        try {
+                            sleep(1500);
+                        } catch (InterruptedException e) {
+                        } finally {
+                            singleFlag = false;
 
-                    } finally {
-                        singleFlag = false;
+                            //显示网络连接失败提示信息
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "网络连接失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 }
             }.start();
 
         } else {
-            Toast.makeText(getApplicationContext(), "查询任务中，请稍等...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "查询中，请稍等...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -104,19 +126,6 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * 绑定View
-     */
-    private void findView() {
-        wordInput = (EditText) findViewById(R.id.wordInput);
-        us_phonetic = (TextView) findViewById(R.id.us_phonetic);
-        uk_phonetic = (TextView) findViewById(R.id.uk_phonetic);
-        explansListView = (ExpandListView) findViewById(R.id.explansListView);
-        webListView = (ExpandListView) findViewById(R.id.webListView);
-        uk_voice = (ImageButton) findViewById(R.id.uk_voice);
-        us_voice = (ImageButton) findViewById(R.id.us_voice);
-    }
-
-    /**
      * 数据初始化
      */
     private void resetInitData() {
@@ -134,20 +143,27 @@ public class MainActivity extends Activity {
      * 通过UI线程更新数据显示
      */
     private void showData(final ResultBean bean) {
-        if (bean.getErrorCode() == 0 && bean.getBasic() != null) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (bean.getBasic() != null) {
                     Toast.makeText(getApplicationContext(), "查询到结果，正在刷新数据....", Toast.LENGTH_LONG).show();
-                    uk_phonetic.setText(bean.getBasic().getUk_phonetic());
-                    us_phonetic.setText(bean.getBasic().getUs_phonetic());
+                    //发音为null,不显示null
+                    if (bean.getBasic().getUk_phonetic() != null)
+                        uk_phonetic.setText(bean.getBasic().getUk_phonetic());
+                    if (bean.getBasic().getUs_phonetic() != null)
+                        us_phonetic.setText(bean.getBasic().getUs_phonetic());
+
                     basicExpAdapter.addAll(resultBean.getBasic().getExplains());
                     basicExpAdapter.notifyDataSetChanged();
-
                     playFlag = true; //查询到结果才可以发音
+                } else {
+                    Toast.makeText(getApplicationContext(), "未查到结果", Toast.LENGTH_LONG).show();
                 }
-            });
-        }
+                singleFlag = false;
+            }
+        });
     }
 
     @Override
