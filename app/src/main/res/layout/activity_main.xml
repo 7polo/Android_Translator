@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/page_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="12dp"
+        android:orientation="vertical">
+
+        <!--查询框、查询按钮    -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/wordInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/edittextstroke"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:hint="输入查询内容"
+                android:paddingLeft="10dp" />
+
+            <ImageButton
+                android:id="@+id/queryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@android:color/transparent"
+                android:onClick="doQuery"
+                android:paddingRight="10dp"
+                android:src="@drawable/query" />
+
+        </FrameLayout>
+        <!--显示内容-->
+        <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+            <!--发音    -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp" >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/title_bottom_margin"
+                    android:text="发音"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="78dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/content_shadow"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <!--美式发音-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/phonetic_margin_right"
+                            android:gravity="center"
+                            android:text="美式:"
+                            android:textSize="@dimen/text_size" />
+
+                        <ImageButton
+                            android:id="@+id/us_voice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/phonetic_margin_right"
+                            android:background="@android:color/transparent"
+                            android:onClick="playVoice"
+                            android:src="@drawable/voice" />
+
+                        <TextView
+                            android:id="@+id/us_phonetic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:minEms="2"
+                            android:textSize="@dimen/text_size" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"></LinearLayout>
+                    <!--英式发音-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/phonetic_margin_right"
+                            android:gravity="center"
+                            android:text="英式:"
+                            android:textSize="@dimen/text_size" />
+
+                        <ImageButton
+                            android:id="@+id/uk_voice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/phonetic_margin_right"
+                            android:background="@android:color/transparent"
+                            android:onClick="playVoice"
+                            android:src="@drawable/voice" />
+
+                        <TextView
+                            android:id="@+id/uk_phonetic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:minEms="2"
+                            android:textSize="@dimen/text_size" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!--解释   -->
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <!--解释翻译-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/title_bottom_margin"
+                        android:text="翻译"
+                        android:textSize="@dimen/text_size" />
+
+                    <com.apologizebao.ui.ExpandListView
+                        android:id="@+id/explansListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/content_shadow">>
+
+                    </com.apologizebao.ui.ExpandListView>
+
+                    <!--web翻译-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/title_bottom_margin"
+                        android:text="Web"
+                        android:textSize="@dimen/text_size" />
+
+                    <com.apologizebao.ui.ExpandListView
+                        android:id="@+id/webListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/content_shadow">
+                        android:layout_marginBottom="20dp">
+                    </com.apologizebao.ui.ExpandListView>
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
